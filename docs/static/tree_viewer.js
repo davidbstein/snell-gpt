@@ -26,7 +26,7 @@ function updateProgress(progress) {
 }
 
 function initializeWorker() {
-  worker = new Worker('cacheWorker.js');
+  worker = new Worker('static/cache_worker.js');
 
   worker.onmessage = function(e) {
     const { progress, processedTree, error, message } = e.data;
