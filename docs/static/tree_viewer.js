@@ -130,8 +130,6 @@ function preprocessResponseDistribution(responseDistribution){
 window._RESPONSE_DIST_COUNT = 0;
 function propagateResponseDistributions(node) {
   if (!node.next) return;
-  if (node.value === " practical purposes.")
-    debugger
   let totalProb = 0;
   let weightedYes = 0;
   let weightedNo = 0;
