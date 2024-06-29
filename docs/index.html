@@ -48,7 +48,19 @@
   </head>
   <body>
     <div id="container">
-      <div id="explainer">This is a thing from <i>Snell</i>.</div>
+      <div id="explainer">
+        <p>
+          This webpage visualizes the possible responses GPT-3.5 might have generated in response to the questions
+          Judge Newsom experiments with in his concurrance in <i>Snell v. United Ins. Co.</i> (11th Cir. 2024)
+        </p><p>
+          Each box shows a piece of text that GPT-3.5 might have generated. The probability of GPT-3.5 picking that box 
+          is shown to the left of the text. On the bottom of each box is the probability of GPT-3.5 saying that in-ground
+          trampolines fall within the definition of the word "landscaping," given that it has chosen the answer in that box.
+        </p><p>
+          Clicking a box will show you the next set of words considered by GPT-3.5. Pressing the "+" key on your keyboard will expand
+          every box on the screen.
+        </p>
+      </div>
     <iframe src="tree_viewer.html" />
       <div id="footer">more explanation, link to paper, etc...</div>
     </div>
