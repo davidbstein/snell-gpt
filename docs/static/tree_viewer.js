@@ -31,7 +31,7 @@ function initializeWorker() {
   worker = new Worker('static/cache_worker.js');
 
   worker.onmessage = function(e) {
-    const { progress, processedTree, error, message } = e.data;
+    const { progress, flattenedTree, error, message } = e.data;
 
     if (message) {
       setProgressBar(message);
@@ -45,24 +45,25 @@ function initializeWorker() {
       updateProgress(progress);
     }
 
-    if (processedTree) {
-      renderTree(processedTree);
+    if (flattenedTree) {
+      renderTree(flattenedTree);
     }
   };
 }
 
 async function fetchTree(url) {
-  worker.postMessage({ url });
+  worker.postMessage({ action: "fetchTree", url });
 }
 
-function renderTree(treeData) {
+function renderTree(flattenedTree) {
   document.body.innerHTML = "";
-  window.chatTree = treeData;
+  window.chatTree = flattenedTree;
+  window.rootNodeId = Object.keys(flattenedTree)[0];
 
   const rootUl = document.createElement('ul');
   rootUl.id = 'myUL';
 
-  const rootElement = createNodeElement(treeData);
+  const rootElement = createNodeElement(flattenedTree[window.rootNodeId]);
   Array.from(rootElement.querySelectorAll("div")).forEach((e) => e.classList.add("is-in-root"));
   rootUl.appendChild(rootElement);
 
@@ -82,29 +83,36 @@ function getNodeById(id) {
   return nodeList[id];
 }
 
-function getChildren(node) {
-  let children = [];
-  for (let key in node.next) {
-    const childNode = node.next[key];
-    if (childNode.prob > window.CUTOFF)
-      children.push(childNode);
-  }
-  return children;
+function fetchChildrenFromWorker(nodeId) {
+  return new Promise((resolve) => {
+    worker.onmessage = function(e) {
+      if (e.data.action === 'childrenFetched' && e.data.nodeId === nodeId) {
+        resolve(e.data.children);
+      }
+    };
+    worker.postMessage({ action: 'getChildren', nodeId });
+  });
 }
+
+async function getChildren(node) {
+  const children = await fetchChildrenFromWorker(node.id);
+  return Object.values(children);
+}
+
   
 // tree_renderers
-
-function toggleNode(event) {
+window._SCROLLING_ALLOWED = true;
+async function toggleNode(event) {
   const nodeContent = event.currentTarget;
   const nodeElement = event.currentTarget.parentElement;
   const nestedList = nodeElement.querySelector(".nested");
 
   const nodeId = parseInt(nestedList.getAttribute("id"), 10);
   const nodeData = getNodeById(nodeId);
-  console.log(nodeData);
+
   if (!nestedList.classList.contains("loaded")) {
     console.debug('Loading children for node ID:', nodeId, 'Node data:', nodeData);
-    renderChildNodes(nodeData, nestedList);
+    await renderChildNodes(nodeData, nestedList);
     nestedList.classList.add("loaded");
   } else {
     console.debug('Already Loaded node ID:', nodeId, 'Node data:', nodeData);
@@ -112,7 +120,7 @@ function toggleNode(event) {
 
   nodeElement.classList.toggle("open");
   nodeContent.classList.toggle("is-visible");
-  if (nodeElement.classList.contains("open")) {
+  if (nodeElement.classList.contains("open") && window._SCROLLING_ALLOWED) {
     nestedList.scrollIntoView({ 
       behavior: "smooth", 
       block: "center",
@@ -132,6 +140,7 @@ function toggleNode(event) {
   adjustAllNodes();
   centerContentVertically(nodeContent);
 }
+
 function createRespDistItem(key, respDist, allCSSVars){
   const perc = (100 * respDist[key]).toFixed(0);
   const valueDiv = document.createElement('div');
@@ -185,7 +194,7 @@ function createNodeElement(node) {
 
   const nodeDiv = document.createElement('div');
   nodeDiv.className = 'node';
-  nodeDiv.onclick = toggleNode; // Using node.onclick
+  nodeDiv.onclick = async (e) => await toggleNode(e); // Using node.onclick
 
   const nodeContentDiv = document.createElement('div')
   nodeContentDiv.className = 'node-content';
@@ -226,14 +235,12 @@ function createNodeElement(node) {
   return li;
 }
 
-function renderChildNodes(node, parentElement) {
-  if (node.next) {
-    for (let key in node.next) {
-      const childNode = node.next[key];
-      if ((childNode.prob > window.CUTOFF) || (childNode.value == "<|endoftext|>")) {
-        const childElement = createNodeElement(childNode);
-        parentElement.appendChild(childElement);
-      }
+async function renderChildNodes(node, parentElement) {
+  const children = await getChildren(node);
+  for (let childNode of children) {
+    if ((childNode.prob > window.CUTOFF) || (childNode.value == "<|endoftext|>")) {
+      const childElement = createNodeElement(childNode);
+      parentElement.appendChild(childElement);
     }
   }
 }
@@ -273,21 +280,37 @@ function elementIsOnScreen(e) {
   );
 }
 
-function openEverything(){
-  updates = Array.from(document.querySelectorAll("li.caret"))
-    .map(async (e, i) => {
-      // if (i < 16) {
-      if (elementIsOnScreen(e)){
-        if (!e.classList.contains("open"))
-          await e.querySelector(".node").click();
-        return e;
-      }
-    }).filter(e=>e);
-  updates[parseInt(update.length / 2)].scrollIntoView({ 
-    behavior: "smooth", 
-    block: "center",
-    inline: "center",
-  });
+async function openEverything() {
+  const visibleClosedElements = Array.from(document.querySelectorAll("li.caret"))
+    .filter(e => elementIsOnScreen(e))
+    .filter(e => !e.classList.contains("open"));
+  window._SCROLLING_ALLOWED = false;
+  for (let el of visibleClosedElements) {
+    await new Promise(resolve => {
+      setTimeout(() => {
+        el.querySelector(".node").click();
+        resolve();
+      }, 1);
+    });
+  }
+
+  const middleElement = visibleClosedElements[Math.floor(visibleClosedElements.length / 2)];
+  console.log(visibleClosedElements);
+  console.log(middleElement);
+  if (middleElement) {
+    await new Promise(resolve => {
+      setTimeout(() => {
+          window._SCROLLING_ALLOWED = false;
+          middleElement.scrollIntoView({
+          behavior: "smooth",
+          block: "center",
+          inline: "center",
+        });
+        resolve();
+      }, 1);
+    });
+  }
+
 }
 
 document.addEventListener('keydown', function(event) {
