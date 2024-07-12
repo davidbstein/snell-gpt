@@ -1,3 +1,5 @@
+//cache_worker.js
+
 importScripts('https://cdnjs.cloudflare.com/ajax/libs/pako/1.0.11/pako.min.js');
 self.onmessage = async function(e) {
   const { url } = e.data;
@@ -100,6 +102,32 @@ self.onmessage = async function(e) {
     return _cur_id;
   }
 
+  function mergeSingleChildNodes(node) {
+    let children = getChildren(node);
+    while (node.next && children.length === 1) {
+      const childNode = children[0];
+      node.value += childNode.value;
+      node.next = childNode.next;
+      node.prob = node.prob;
+      children = getChildren(node);
+    }
+    if (node.next) {
+      for (let key in node.next) {
+        mergeSingleChildNodes(node.next[key]);
+      }
+    }
+  }
+
+  function getChildren(node) {
+    let children = [];
+    for (let key in node.next) {
+      const childNode = node.next[key];
+      if (childNode.prob > 0.09) // Using a constant value for CUTOFF
+        children.push(childNode);
+    }
+    return children;
+  }
+
   function preprocessResponseDistribution(responseDistribution) {
     const rd = {
       yes: (responseDistribution.yes || 0),
@@ -188,6 +216,7 @@ self.onmessage = async function(e) {
   self.postMessage({ progress: 1 });
   const nodeCount = assignIds(tree);
   self.postMessage({message: "(3/3) computing response distributions..."})
+  mergeSingleChildNodes(tree);
   propagateResponseDistributions(tree, {total:nodeCount, n:0});
   self.postMessage({ processedTree: tree });
 };

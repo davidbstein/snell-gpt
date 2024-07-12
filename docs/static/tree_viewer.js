@@ -1,4 +1,6 @@
-// node_storage.js
+// tree_viewer.js
+
+// node_storage
 let worker;
 
 function loadScript(url) {
@@ -50,16 +52,12 @@ function initializeWorker() {
 }
 
 async function fetchTree(url) {
-  // await loadScript('https://cdnjs.cloudflare.com/ajax/libs/pako/2.0.4/pako.min.js');
-
   worker.postMessage({ url });
 }
 
 function renderTree(treeData) {
   document.body.innerHTML = "";
-  mergeSingleChildNodes(treeData);
   window.chatTree = treeData;
-  propagateResponseDistributions(treeData);
 
   const rootUl = document.createElement('ul');
   rootUl.id = 'myUL';
@@ -71,8 +69,7 @@ function renderTree(treeData) {
   document.body.appendChild(rootUl);
 }
 
-
-// node_management.js
+// node_management
 
 const nodeList = {};
 
@@ -87,7 +84,6 @@ function getNodeById(id) {
 
 function getChildren(node) {
   let children = [];
-  children = [];
   for (let key in node.next) {
     const childNode = node.next[key];
     if (childNode.prob > window.CUTOFF)
@@ -96,71 +92,7 @@ function getChildren(node) {
   return children;
 }
   
-function mergeSingleChildNodes(node) {
-  let children = getChildren(node);
-  while (node.next && children.length === 1) {
-    const childNode = children[0];
-    node.value += childNode.value;
-    node.next = childNode.next;
-    node.prob = node.prob;
-    // node.prob *= childNode.prob
-    children = getChildren(node);
-  }
-  if (node.next) {
-    for (let key in node.next) {
-      mergeSingleChildNodes(node.next[key]);
-    }
-  }
-}
-
-function preprocessResponseDistribution(responseDistribution){
-  const rd = {
-    yes: (responseDistribution.yes || 0),
-    no: (responseDistribution.no || 0),
-    maybe: (responseDistribution.maybe || 0),
-  }
-  if (rd.yes + rd.no == 0) return rd;
-  const remainder = 1 - rd.yes - rd.no - rd.maybe;
-  return {
-    yes: rd.yes + remainder * rd.yes/(rd.yes+rd.no),
-    no: rd.no + remainder * rd.no/(rd.yes+rd.no),
-    maybe: rd.maybe,
-  }
-}
-window._RESPONSE_DIST_COUNT = 0;
-function propagateResponseDistributions(node) {
-  if (!node.next) return;
-  let totalProb = 0;
-  let weightedYes = 0;
-  let weightedNo = 0;
-  let weightedMaybe = 0;
-  if (node.response_distribution) window._RESPONSE_DIST_COUNT++;
-  
-  for (let key in node.next) {
-    const childNode = node.next[key];
-    propagateResponseDistributions(childNode);
-
-    if (childNode.response_distribution) {
-      const childProb = childNode.prob;
-      const respDist = preprocessResponseDistribution(childNode.response_distribution);
-      totalProb += childProb;
-      weightedYes += respDist.yes * childProb;
-      weightedNo += respDist.no * childProb;
-      weightedMaybe += respDist.maybe * childProb;
-    }
-  }
-  if (totalProb > 0) {
-    // totalProb = 1; // for testing
-    node.response_distribution = {
-      yes: weightedYes / totalProb,
-      no: weightedNo / totalProb,
-      maybe: weightedMaybe / totalProb
-    };
-  }
-}
-
-
-// tree_renderers.js
+// tree_renderers
 
 function toggleNode(event) {
   const nodeContent = event.currentTarget;
@@ -222,14 +154,14 @@ function createRespDistItem(key, respDist, allCSSVars){
 
 function renderResponseDistribution(node) {
   if (!node.response_distribution) return null;
-  const respDist = preprocessResponseDistribution(node.response_distribution);
+  const respDist = node.response_distribution;
 
   const responseDiv = document.createElement('div');
   responseDiv.className = 'response-distribution';
 
   const yesnoDiv = document.createElement('div');
   yesnoDiv.className = 'r-d-yesno-container'
-  
+
   let allCSSVars = []
   const yesDiv = createRespDistItem("yes", respDist, allCSSVars);
   const noDiv = createRespDistItem("no", respDist, allCSSVars);
@@ -242,7 +174,6 @@ function renderResponseDistribution(node) {
 
   return responseDiv;
 }
-
 
 function createNodeElement(node) {
   assignId(node);
