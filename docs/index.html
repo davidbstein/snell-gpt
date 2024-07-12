@@ -1,7 +1,11 @@
 <!DOCTYPE html>
 <html>
   <head>
+
+    <link rel="preconnect" href="https://rsms.me/">
+    <link rel="stylesheet" href="https://rsms.me/inter/inter.css">
     <style>
+      /* reset */
       *, *::before, *::after {
         box-sizing: border-box;
       }
@@ -12,7 +16,6 @@
         line-height: 1.25;
         -webkit-font-smoothing: antialiased;
         height: 100dvh;
-        overflow: hidden;
       }
       img, picture, video, canvas, svg {
         display: block;
@@ -33,46 +36,90 @@
       div {
         box-sizing: border-box;
       }
+      /* end reset */
+      :root {
+        font-family: Inter, sans-serif;
+        font-feature-settings: 'liga' 1, 'calt' 1; /* fix for Chrome */
+      }
+      @supports (font-variation-settings: normal) {
+        :root { font-family: InterVariable, sans-serif; }
+      }
       body {
         background: #e0e0ff;
       }
+      h1 {
+        font-size: 1.5em;
+        margin-bottom: .5em;
+        margin-top: .5em;
+      }
+      h2 {
+        font-size: 1em;
+      }
+      qt {
+        font-family: serif;
+        font-size: 1.1em;
+        line-height: 1em;
+      }
+      tt {
+        border: 1px solid #aaa;
+        background: #eee;
+        padding: 2px 4px;
+        border-radius: 4px;
+      }
       iframe {
-        width: 100%;
+        width: calc(100vw - 2em);
         flex-grow: 1;
         border: 1px solid grey;
         padding: none;
         margin: 1em;
+        min-height: 70vh;
       }
       #container {
         display: flex;
         flex-direction: column;
         height: 100%;
+        align-items: center;
       }
       #explainer, #footer {
         margin: 1em;
+        max-width: 800px;
       }
       p {
         margin-bottom: .5em;
+      }
     </style>
   </head>
   <body>
     <div id="container">
       <div id="explainer">
+        <h1>
+          GPT's Possible Responses to Judge Newsom's Experiments in
+          <a href="https://media.ca11.uscourts.gov/opinions/pub/files/202212581.pdf"><i>Snell v. United</i></a>
+        </h1>
         <p>
-          <b> (The following is placeholder. I will write a better explaination before sharing this link -stein) </b>
-          This webpage visualizes the possible responses GPT-3.5 might have generated in response to the questions
-          Judge Newsom experiments with in his concurrance in <i>Snell v. United Ins. Co.</i> (11th Cir. 2024)
+          In his concurrance in
+          <a href="https://media.ca11.uscourts.gov/opinions/pub/files/202212581.pdf"><i>Snell v. United Ins. Co. (11th Cir. 2024)</i></a>,
+          Judge Newsom asked ChatGPT: <i><qt>What is the ordinary meaning of "landscaping"?</qt></i> followed by <i><qt>Is installing
+          an in-ground trampoline considered "landscaping"?</qt></i> This visualization shows GPT-3.5's possible responses to Newsom's questions.
+        </p>
+
+        <h2> How to read this chart </h2>
+        <p>
+          Each box represents a segment of text GPT-3.5 could generate. The number on the left indicates the probability of GPT-3.5 selecting that text.
         </p><p>
-          Each box shows a piece of text that GPT-3.5 might have generated. The probability of GPT-3.5 picking that box 
-          is shown to the left of the text. On the bottom of each box is the probability of GPT-3.5 saying that in-ground
-          trampolines fall within the definition of the word "landscaping," given that it has chosen the answer in that box.
-        </p><p>
-          Clicking a box will show you the next set of words considered by GPT-3.5. Pressing the "+" key on your keyboard will expand
-          every box on the screen.
+          The colored bar shows the likelihood of GPT's responses to Newsom's follow-up question, given the response so far.
+        </p>
+        <p>
+          For example, there is a 41% probability of an answer starting with: <b><tt>The ordinary meaning of</tt></b>. After that, there is a 79% chance that GPT-3.5 will add the word <b><tt>"landscaping"</tt></b>.
+
+        <h2> Instructions </h2>
+        <p>
+           - to expand an option: click on box <br/>
+           - to expand all visible options: press the <tt>+</tt> key.
         </p>
       </div>
       <iframe src="tree_viewer.html"></iframe>
-      <div id="footer">more explanation, link to paper, etc...</div>
+      <div id="footer">(c) David Stein 2024</div>
     </div>
   </body>
 </html>
