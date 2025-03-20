@@ -327,6 +327,23 @@ document.addEventListener('DOMContentLoaded', adjustAllNodes);
 
 document.addEventListener("DOMContentLoaded", async () => {
   // await loadScript('https://cdnjs.cloudflare.com/ajax/libs/pako/2.0.4/pako.min.js');
+  if (/Mobi|Android/i.test(navigator.userAgent)) {
+    const warningDiv = document.createElement("div");
+    warningDiv.id = "mobile-warning";
+    warningDiv.innerHTML = `<div style='position: fixed; top: 20%; left: 50%; transform: translate(-50%, -50%); background: white; padding: 20px; border: 1px solid black; z-index: 1000;'>
+      <p>This demo is not mobile-friendly. It uses a lot of data and relies on desktop-only browser features.</p>
+      <button id='proceed-button'>Continue</button>
+    </div>`;
+    document.body.appendChild(warningDiv);
+
+    document.getElementById("proceed-button").addEventListener("click", function() {
+      document.body.removeChild(warningDiv);
+      initializeWorker();
+      fetchTree('/static/tree.json.gz');
+    });
+    return;
+  }
+  
   initializeWorker();
   await fetchTree('/static/tree.json.gz');
 });
