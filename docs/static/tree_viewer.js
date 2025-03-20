@@ -293,10 +293,12 @@ async function openEverything() {
       setTimeout(() => {
         el.querySelector(".node").click();
         resolve();
-      }, 50); 
+      }, 5); 
     });
   }
   await new Promise(resolve => setTimeout(resolve, 100)); 
+
+  adjustAllNodes();  
 
   const middleElement = visibleClosedElements[Math.floor(visibleClosedElements.length / 2)];
   if (middleElement) {
