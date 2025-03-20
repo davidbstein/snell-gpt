@@ -284,34 +284,37 @@ async function openEverything() {
   const visibleClosedElements = Array.from(document.querySelectorAll("li.caret"))
     .filter(e => elementIsOnScreen(e))
     .filter(e => !e.classList.contains("open"));
+
   window._SCROLLING_ALLOWED = false;
+
+  // Open nodes one by one
   for (let el of visibleClosedElements) {
     await new Promise(resolve => {
       setTimeout(() => {
         el.querySelector(".node").click();
         resolve();
-      }, 1);
+      }, 5); 
     });
   }
+  await new Promise(resolve => setTimeout(resolve, 100)); 
+
+  adjustAllNodes();  
 
   const middleElement = visibleClosedElements[Math.floor(visibleClosedElements.length / 2)];
-  console.log(visibleClosedElements);
-  console.log(middleElement);
   if (middleElement) {
     await new Promise(resolve => {
       setTimeout(() => {
-          window._SCROLLING_ALLOWED = false;
-          middleElement.scrollIntoView({
+        middleElement.scrollIntoView({
           behavior: "smooth",
           block: "center",
           inline: "center",
         });
         resolve();
-      }, 1);
+      }, 100);
     });
   }
-
 }
+
 
 document.addEventListener('keydown', function(event) {
   if (event.key === '=') {
