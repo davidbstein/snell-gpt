@@ -327,12 +327,12 @@ document.addEventListener('DOMContentLoaded', adjustAllNodes);
 
 document.addEventListener("DOMContentLoaded", async () => {
   // await loadScript('https://cdnjs.cloudflare.com/ajax/libs/pako/2.0.4/pako.min.js');
-  if (/Mobi|Android/i.test(navigator.userAgent)) {
+  if (/Mobi|Android|iPhone/i.test(navigator.userAgent)) {
     const warningDiv = document.createElement("div");
     warningDiv.id = "mobile-warning";
-    warningDiv.innerHTML = `<div style='position: fixed; top: 20%; left: 50%; transform: translate(-50%, -50%); background: white; padding: 20px; border: 1px solid black; z-index: 1000;'>
+    warningDiv.innerHTML = `<div style='position: fixed; top: 20%; left: 0%; right: 0%; height: 50%;   background: #500;color: white;text-align: center;font-size: 3vh;font-family: sans-serif;padding: 1em;'>
       <p>This demo is not mobile-friendly. It uses a lot of data and relies on desktop-only browser features.</p>
-      <button id='proceed-button'>Continue</button>
+      <button id='proceed-button'>Try Anyways</button>
     </div>`;
     document.body.appendChild(warningDiv);
 
