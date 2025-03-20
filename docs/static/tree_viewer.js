@@ -263,9 +263,15 @@ function centerContentVertically(node) {
 }
 
 function adjustAllNodes() {
-  const nodes = document.querySelectorAll('.node.is-visible');
-  nodes.forEach(node => centerContentVertically(node));
-  nodes.forEach(node => centerContentVertically(node));
+  clearTimeout(centerContentTimeout);
+
+  centerContentTimeout = setTimeout(() => {
+    console.debug("Adjusting node positions...");
+    
+    const nodes = document.querySelectorAll('.node.is-visible');
+    nodes.forEach(node => centerContentVertically(node));
+    
+  }, 100);
 }
 
 //app.js
