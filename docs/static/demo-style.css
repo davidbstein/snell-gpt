@@ -29,8 +29,10 @@ div {
 }
 .prob {
   padding: 0 .5em;
-  color: #666;
+  color: #fff;
   font-size: .75em;
+  border: 1px solid white;
+  font-weight: bold;
 }
 .prob.is-in-root {
   display: none;
