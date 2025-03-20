@@ -263,15 +263,9 @@ function centerContentVertically(node) {
 }
 
 function adjustAllNodes() {
-  clearTimeout(centerContentTimeout);
-
-  centerContentTimeout = setTimeout(() => {
-    console.debug("Adjusting node positions...");
-    
-    const nodes = document.querySelectorAll('.node.is-visible');
-    nodes.forEach(node => centerContentVertically(node));
-    
-  }, 100);
+  const nodes = document.querySelectorAll('.node.is-visible');
+  nodes.forEach(node => centerContentVertically(node));
+  nodes.forEach(node => centerContentVertically(node));
 }
 
 //app.js
