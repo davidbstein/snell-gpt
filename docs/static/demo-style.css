@@ -21,9 +21,6 @@ p, h1, h2, h3, h4, h5, h6 {
 #root, #__next {
   isolation: isolate;
 }
-body{
-  background: white;
-}
 div {
   box-sizing: border-box;
 }
@@ -43,12 +40,12 @@ div {
 
 body{
   background: black;
+  min-height: 100vh;
+  align-content: center;
 }
 
 #myUL {
   display: flex;
-  margin-top: 30vh;
-  margin-left: 30vvw;
   font-size: 2em;
   font-family: monospace;
 }
