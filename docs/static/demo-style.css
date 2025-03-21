@@ -320,5 +320,6 @@ li {
   order: 1;
 }
 .value {
+  white-space: pre-wrap;
   order: 2;
 }
