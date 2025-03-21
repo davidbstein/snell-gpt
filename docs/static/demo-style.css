@@ -323,3 +323,9 @@ li {
   white-space: pre-wrap;
   order: 2;
 }
+
+.progress-container {
+  width:100vw;
+  margin: 0;
+  padding: 0;
+}
