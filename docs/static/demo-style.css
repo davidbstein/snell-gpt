@@ -60,14 +60,6 @@ li {
   border: 1px solid #aaa;
   border-right: 0;
 }
-.prob {
-  position: absolute;
-  left: 0;
-  top: .25em;
-}
-.value {
-  padding-left: 2.2em;
-}
 .endoftext {
   font-family: monospace;
   background: yellow;
@@ -240,10 +232,6 @@ li {
   color: #ccc;
 }
 
-.value {
-  display: inline-block;
-  white-space: pre-wrap;
-}
 .node {
   background: #333;
   color:white;
@@ -318,4 +306,19 @@ li {
 }
 li {
   box-shadow: -5px 0px 4px 1px #000;
+}
+
+.node-content-detail {
+  display: flex;
+  flex-direction: row;
+  flex-wrap: nowrap;
+  justify-content: center;
+  align-items: center;
+  gap: .5em;
+}
+.prob {
+  order: 1;
+}
+.value {
+  order: 2;
 }
