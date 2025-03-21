@@ -309,3 +309,7 @@ li {
 li {
   box-shadow: -5px 0px 4px 1px #888;
 }
+.progress-container {
+  width:50vw;
+  margin: calc(10vh) 25vw;
+}
