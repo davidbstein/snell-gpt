@@ -6,7 +6,7 @@
     <script>
       (function() {
           const STYLE_ID = 'distribution-toggle';
-          const STYLE_CONTENT = `.response-distribution {transform: scaleY(1);height: 0px !important;}`;
+          const STYLE_CONTENT = `.response-distribution {transform: scaleY(1);height: 0px !important; border: 0px !important;}`;
           function toggleDistributions() {
             const existingStyle = document.getElementById(STYLE_ID);
         
@@ -28,13 +28,15 @@
     <style>
       .response-distribution {
         transform: scaleY(1);
-        transition: transform .2s, height: .3s;
+        transition: transform .2s, height .3s;
         height: 2em;
         overflow: hidden;
       }
     </style>
-    <style id='distribution-toggle'>.response-distribution {transform: scaleY(1);height: 0px !important;}</style>
+    <style id='distribution-toggle'>.response-distribution {transform: scaleY(1);height: 0px !important;border:0px !important;}</style>
   </head>
   <body>
+    <ul id="myUL"><li class="caret has-children"><div class="node is-in-root"><div class="node-content-wrapper is-in-root"><div class="node-content is-in-root"><div class="node-content-detail is-in-root"><div class="value is-in-root">Question: What is the ordinary meaning of "landscaping"?
+Response:</div><div class="prob is-in-root">100%</div><div class="total_prob is-in-root">1</div><div class="depth is-in-root"></div></div><div class="response-distribution is-in-root" style="--yes-size: 46; --yes-perc: 46%; --no-size: 13; --no-perc: 13%; --maybe-size: 41; --maybe-perc: 41%;"><div class="r-d-yesno-container is-in-root"><div class="r-d-yes r-d-elem is-in-root" style="--bar-size: 46; --bar-perc: 46%;"><div class="r-d-label is-in-root">yes</div><div class="r-d-value is-in-root">46%</div></div><div class="r-d-no r-d-elem is-in-root" style="--bar-size: 13; --bar-perc: 13%;"><div class="r-d-label is-in-root">no</div><div class="r-d-value is-in-root">13%</div></div></div><div class="r-d-maybe r-d-elem is-in-root" style="--bar-size: 41; --bar-perc: 41%;"><div class="r-d-label is-in-root">maybe</div><div class="r-d-value is-in-root">41%</div></div></div></div></div></div><ul class="nested" id="0"></ul></li></ul>
   </body>
 </html>
