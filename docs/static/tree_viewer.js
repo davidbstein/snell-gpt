@@ -17,7 +17,7 @@ window._progressValue = 0;
 
 function setProgressBar(msg) {
   window._progressValue = 0;
-  document.getElementById("progress-bar-holder").innerHTML = `<div style='width:50vw;margin: calc(10vh) 25vw;'>${msg}<div id='progress-bar'><div id='progress'></div><div id='progress-info'></div></div></div>`;
+  document.getElementById("progress-bar-holder").innerHTML = `<div id='progress-container'>${msg}<div id='progress-bar'><div id='progress'></div><div id='progress-info'></div></div></div>`;
 }
 
 function updateProgress(progress) {
