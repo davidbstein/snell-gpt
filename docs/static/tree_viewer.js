@@ -196,12 +196,16 @@ function createNodeElement(node) {
   nodeDiv.className = 'node';
   nodeDiv.onclick = async (e) => await toggleNode(e); // Using node.onclick
 
+
+  const nodeContentWrapper = document.createElement('div')
+  nodeContentWrapper.className = 'node-content-wrapper';
+  
   const nodeContentDiv = document.createElement('div')
   nodeContentDiv.className = 'node-content';
   
-  const nodeContentWrapper = document.createElement('div')
-  nodeContentWrapper.className = 'node-content-wrapper';
-
+  const nodeContentDetailDiv = document.createElement('div')
+  nodeContentDetailDiv.className = 'node-content-detail';
+  
   for (let k of ['value', 'prob', 'total_prob', 'depth']) {
     const newDiv = document.createElement('div');
     newDiv.className = k;
@@ -211,9 +215,9 @@ function createNodeElement(node) {
     if (k == 'value'){
       newDiv.innerHTML = newDiv.innerHTML.replace("&lt;|endoftext|&gt;", "<span class='endoftext'>end</span>");
     }
-    nodeContentDiv.appendChild(newDiv);
+    nodeContentDetailDiv.appendChild(newDiv);
   }
-
+  nodeContentDiv.appendChild(nodeContentDetailDiv);
   nodeContentWrapper.appendChild(nodeContentDiv);
   nodeDiv.appendChild(nodeContentWrapper);
 
