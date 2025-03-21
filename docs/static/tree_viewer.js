@@ -209,7 +209,7 @@ function createNodeElement(node) {
   for (let k of ['value', 'prob', 'total_prob', 'depth']) {
     const newDiv = document.createElement('div');
     newDiv.className = k;
-    newDiv.textContent = node[k];
+    newDiv.textContent = node[k].trim();
     if (k == 'prob')
       newDiv.textContent = `${(100*node[k]).toFixed(0)}%`;
     if (k == 'value'){
