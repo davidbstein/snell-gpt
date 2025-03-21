@@ -209,9 +209,10 @@ function createNodeElement(node) {
   for (let k of ['value', 'prob', 'total_prob', 'depth']) {
     const newDiv = document.createElement('div');
     newDiv.className = k;
-    newDiv.textContent = node[k].trim();
+    newDiv.textContent = node[k];
     if (k == 'prob')
       newDiv.textContent = `${(100*node[k]).toFixed(0)}%`;
+    newDiv.textContent = newDiv.textContent.trim();
     if (k == 'value'){
       newDiv.innerHTML = newDiv.innerHTML.replace("&lt;|endoftext|&gt;", "<span class='endoftext'>end</span>");
     }
