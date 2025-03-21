@@ -339,3 +339,13 @@ li {
   left: 0;
   right: 0;
 }
+#question-reminder-box {
+  position: absolute;
+  top: 0;
+  left: 0;
+  white-space: pre-wrap;
+  font-size: 2em;
+  border: 1px solid #ccc;
+  background: #003;
+  padding: 1em;
+}
