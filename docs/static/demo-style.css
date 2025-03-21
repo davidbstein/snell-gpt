@@ -324,7 +324,7 @@ li {
   order: 2;
 }
 
-.progress-container {
+#progress-container {
   width:100vw;
   margin: 0;
   padding: 0;
