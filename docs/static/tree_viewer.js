@@ -56,7 +56,8 @@ async function fetchTree(url) {
 }
 
 function renderTree(flattenedTree) {
-  document.body.innerHTML = "";
+  document.body.innerHTML = `<div id='question-reminder-box'>Q1: What is the ordinary meaning of “landscaping”?
+Q2: Is installing an in-ground trampoline “landscaping”?</div>`;
   window.chatTree = flattenedTree;
   window.rootNodeId = Object.keys(flattenedTree)[0];
 
